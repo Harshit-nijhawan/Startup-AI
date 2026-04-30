@@ -15,16 +15,23 @@ class Settings:
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24  # 24 hours
     
-    # Database
-    DATABASE_URL: str = "sqlite:///./startup_ai.db"
+    # Database — SQLite locally, PostgreSQL (Neon) in production
+    DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite:///./startup_ai.db")
     
-    # CORS
-    ALLOWED_ORIGINS: list = [
-        "http://localhost:5173",
-        "http://localhost:5174",
-        "http://localhost:3000",
-        "http://127.0.0.1:5173",
-        "http://127.0.0.1:5174",
-    ]
+    # CORS — add your Vercel URL via ALLOWED_ORIGINS env var (comma-separated)
+    @property
+    def ALLOWED_ORIGINS(self) -> list:
+        env_origins = os.getenv("ALLOWED_ORIGINS", "")
+        base = [
+            "http://localhost:5173",
+            "http://localhost:5174",
+            "http://localhost:3000",
+            "http://127.0.0.1:5173",
+            "http://127.0.0.1:5174",
+        ]
+        if env_origins:
+            extra = [o.strip() for o in env_origins.split(",") if o.strip()]
+            return base + extra
+        return base
 
 settings = Settings()
