@@ -1,11 +1,33 @@
+import logging
+import sys
+import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
 from app.db.database import init_db
 from app.api.routes import auth, analysis, history, improve
 
+# ── Startup Logging ──────────────────────────────────────
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    handlers=[logging.StreamHandler(sys.stdout)]
+)
+logger = logging.getLogger(__name__)
+
+logger.info("=== Startup: Startup AI Simulator ===")
+logger.info(f"DATABASE_URL set: {'Yes' if os.getenv('DATABASE_URL') else 'NO - using SQLite'}")
+logger.info(f"GROQ_API_KEY set: {'Yes' if os.getenv('GROQ_API_KEY') else 'NO - MISSING!'}")
+logger.info(f"SECRET_KEY set:   {'Yes' if os.getenv('SECRET_KEY') else 'NO - using default'}")
+
 # Initialize Database
-init_db()
+try:
+    logger.info("Connecting to database...")
+    init_db()
+    logger.info("Database connected and tables ready.")
+except Exception as e:
+    logger.error(f"DATABASE CONNECTION FAILED: {e}")
+    sys.exit(1)
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
