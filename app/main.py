@@ -19,6 +19,7 @@ logger.info("=== Startup: Startup AI Simulator ===")
 logger.info(f"DATABASE_URL set: {'Yes' if os.getenv('DATABASE_URL') else 'NO - using SQLite'}")
 logger.info(f"GROQ_API_KEY set: {'Yes' if os.getenv('GROQ_API_KEY') else 'NO - MISSING!'}")
 logger.info(f"SECRET_KEY set:   {'Yes' if os.getenv('SECRET_KEY') else 'NO - using default'}")
+logger.info(f"ALLOWED_ORIGINS: {settings.ALLOWED_ORIGINS}")
 
 # Initialize Database
 try:
