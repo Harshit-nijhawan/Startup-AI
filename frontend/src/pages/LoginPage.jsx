@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
+import { API_BASE } from "../api/analyze";
 import ShimmerButton from "../components/ui/ShimmerButton";
 import GlowInput from "../components/ui/GlowInput";
 
@@ -18,7 +19,7 @@ const LoginPage = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8000/login",
+        `${API_BASE}/login`,
         {
           email,
           password,
