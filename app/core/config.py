@@ -30,7 +30,7 @@ class Settings:
             "http://127.0.0.1:5174",
         ]
         if env_origins:
-            extra = [o.strip() for o in env_origins.split(",") if o.strip()]
+            extra = [o.strip().rstrip("/") for o in env_origins.split(",") if o.strip()]
             return base + extra
         return base
 
