@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import InputForm from './InputForm';
 import ResultsSection from './ResultsSection';
 import AgentFlow from './AgentFlow';
@@ -11,19 +12,22 @@ import { useLoadAnalysis } from '../hooks/useLoadAnalysis';
 function GridOverlay() {
   return (
     <div
-      className="fixed inset-0 pointer-events-none z-0"
+      className="fixed inset-0 pointer-events-none z-0 overflow-hidden"
       aria-hidden="true"
     >
       <div className="grid-bg absolute inset-0" />
-      {/* Radial gradient blob – top left */}
+      {/* Radial gradient blobs */}
       <div
-        className="absolute -top-40 -left-40 w-96 h-96 rounded-full blur-3xl opacity-20"
-        style={{ background: 'radial-gradient(circle, #7c3aed, transparent)' }}
+        className="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] rounded-full blur-[120px] opacity-30 dark:opacity-20 animate-pulse"
+        style={{ background: 'radial-gradient(circle, #6366f1, transparent)' }}
       />
-      {/* Radial gradient blob – bottom right */}
       <div
-        className="absolute -bottom-40 -right-40 w-96 h-96 rounded-full blur-3xl opacity-15"
-        style={{ background: 'radial-gradient(circle, #a855f7, transparent)' }}
+        className="absolute top-[20%] -right-[5%] w-[30%] h-[30%] rounded-full blur-[100px] opacity-20 dark:opacity-10"
+        style={{ background: 'radial-gradient(circle, #ec4899, transparent)' }}
+      />
+      <div
+        className="absolute -bottom-[10%] left-[20%] w-[35%] h-[35%] rounded-full blur-[110px] opacity-20 dark:opacity-15"
+        style={{ background: 'radial-gradient(circle, #8b5cf6, transparent)' }}
       />
     </div>
   );
@@ -56,7 +60,7 @@ export default function Dashboard() {
 
   return (
     <div
-      className="relative min-h-screen theme-transition flex flex-col"
+      className="relative min-h-screen theme-transition flex flex-col noise-bg"
       style={{ background: 'var(--bg-primary)' }}
     >
       <GridOverlay />
@@ -71,60 +75,66 @@ export default function Dashboard() {
 
         {/* Main Content */}
         <main className="flex-1 overflow-y-auto">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 pb-20">
+          <div className="max-w-7xl mx-auto px-4 sm:px-10 py-12 pb-32">
             {/* Hero headline - only show when no data */}
             {!displayData && !data && (
-              <div className="text-center mb-10">
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                className="text-center mb-16"
+              >
                 <div
-                  className="inline-flex items-center gap-2 text-xs font-semibold px-3 py-1.5
-                            rounded-full border mb-4"
+                  className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] px-4 py-2
+                            rounded-full border mb-8 glass shadow-sm"
                   style={{
-                    background: 'var(--accent-soft)',
-                    borderColor: 'var(--border)',
                     color: 'var(--accent)',
+                    borderColor: 'var(--accent-soft)',
                   }}
                 >
-                  <span className="relative flex h-1.5 w-1.5">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 bg-current" />
-                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-current" />
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 bg-indigo-500" />
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-500" />
                   </span>
-                  ⚡ 3 AI Agents · Real Insights · Zero Guesswork
+                  AI-Powered Venture Analysis
                 </div>
 
-                <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight mb-3">
+                <h1 className="text-5xl sm:text-7xl font-black tracking-tight mb-6 leading-[1.1] font-outfit text-balance">
                   <span className="gradient-text">Validate your startup</span>
                   <br />
-                  <span style={{ color: 'var(--text-primary)' }}>before you build it.</span>
+                  <span className="text-slate-900 dark:text-white">before you build it.</span>
                 </h1>
 
-                <p className="text-base max-w-xl mx-auto" style={{ color: 'var(--text-muted)' }}>
-                  Three specialized AI agents analyze your idea—researching the market,
-                  planning the product, and critiquing the risks in seconds.
+                <p className="text-lg sm:text-xl max-w-2xl mx-auto font-medium leading-relaxed" style={{ color: 'var(--text-muted)' }}>
+                  Deploy three specialized AI agents to stress-test your idea, 
+                  map the market, and build a launch-ready product roadmap in seconds.
                 </p>
-              </div>
+              </motion.div>
             )}
 
             {/* ── Input Card ── */}
-            <div className="max-w-2xl mx-auto mb-6">
+            <div className="max-w-3xl mx-auto mb-12">
               <InputForm onSubmit={handleAnalyzeSubmit} loading={loading} error={error} />
             </div>
 
             {/* ── Agent Flow Visualization ── */}
             {(loading || data) && (
-              <div className="max-w-4xl mx-auto mb-6">
+              <div className="max-w-5xl mx-auto mb-10">
                 <AgentFlow stage={stage} isLoading={loading} />
               </div>
             )}
 
             {/* ── Loading skeleton ── */}
             {loading && (
-              <div className="mt-6">
-                <div className="text-center mb-4">
-                  <p
-                    className="text-sm font-medium animate-pulse"
-                    style={{ color: 'var(--text-muted)' }}
-                  >
-                    🤖 AI agents are working — this may take 20–40 seconds...
+              <div className="mt-10 max-w-5xl mx-auto">
+                <div className="text-center mb-8">
+                  <div className="inline-block px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-white/5 mb-4">
+                    <p className="text-xs font-bold animate-pulse uppercase tracking-widest text-indigo-500">
+                      Processing Neural Intelligence...
+                    </p>
+                  </div>
+                  <p className="text-sm font-medium text-slate-400">
+                    Our agents are synthesizing market data and competitive landscapes.
                   </p>
                 </div>
                 <SkeletonLoader />
@@ -133,17 +143,26 @@ export default function Dashboard() {
 
             {/* ── Results ── */}
             {!loading && (displayData || data) && (
-              <ResultsSection data={displayData || data} />
+              <div className="max-w-6xl mx-auto">
+                <ResultsSection data={displayData || data} />
+              </div>
             )}
 
             {/* ── Empty state placeholder ── */}
             {!loading && !displayData && !data && !error && (
-              <div className="mt-16 text-center opacity-40">
-                <div className="text-5xl mb-3">🚀</div>
-                <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
-                  Your analysis results will appear here.
+              <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 0.5 }}
+                transition={{ delay: 1, duration: 1 }}
+                className="mt-24 text-center"
+              >
+                <div className="w-20 h-20 mx-auto rounded-3xl bg-slate-100 dark:bg-slate-800/50 flex items-center justify-center text-3xl mb-6 grayscale opacity-50">
+                  🚀
+                </div>
+                <p className="text-sm font-bold uppercase tracking-[0.3em]" style={{ color: 'var(--text-muted)' }}>
+                  Awaiting Input Configuration
                 </p>
-              </div>
+              </motion.div>
             )}
           </div>
         </main>
@@ -151,13 +170,21 @@ export default function Dashboard() {
 
       {/* ── Footer ── */}
       <footer
-        className="relative z-10 border-t py-6 text-center text-xs theme-transition"
+        className="relative z-10 border-t py-8 text-center theme-transition glass"
         style={{
           borderColor: 'var(--border)',
-          color: 'var(--text-muted)',
         }}
       >
-        Stop guessing. Start building. — Startup AI Simulator © 2025
+        <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
+            © 2025 Startup AI Simulator — Build with Certainty
+          </p>
+          <div className="flex items-center gap-6">
+            <a href="#" className="text-[10px] font-bold uppercase tracking-widest text-slate-400 hover:text-indigo-500 transition-colors">Privacy</a>
+            <a href="#" className="text-[10px] font-bold uppercase tracking-widest text-slate-400 hover:text-indigo-500 transition-colors">Terms</a>
+            <a href="#" className="text-[10px] font-bold uppercase tracking-widest text-slate-400 hover:text-indigo-500 transition-colors">Documentation</a>
+          </div>
+        </div>
       </footer>
     </div>
   );

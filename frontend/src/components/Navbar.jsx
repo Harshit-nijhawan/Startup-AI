@@ -1,4 +1,4 @@
-import { Sun, Moon, Sparkles, LogOut } from 'lucide-react';
+import { Sun, Moon, Sparkles, LogOut, User } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import { useNavigate } from 'react-router-dom';
 
@@ -14,86 +14,73 @@ export default function Navbar() {
   };
 
   return (
-    <header
-      className="glass sticky top-0 z-50 w-full border-b theme-transition"
-      style={{
-        backgroundColor: isDark ? 'rgba(2, 6, 23, 0.8)' : 'rgba(248, 250, 252, 0.8)',
-        borderBottomColor: 'var(--border)',
-      }}
-    >
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-        {/* Logo */}
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500
-                          flex items-center justify-center shadow-glow-purple">
-            <Sparkles size={15} className="text-white" />
+    <header className="sticky top-0 z-50 w-full glass theme-transition">
+      <div className="max-w-7xl mx-auto px-4 sm:px-8 h-20 flex items-center justify-between">
+        {/* Logo Section */}
+        <div className="flex items-center gap-4 group cursor-pointer" onClick={() => navigate('/')}>
+          <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-indigo-600 to-violet-500
+                          flex items-center justify-center shadow-lg shadow-indigo-500/20
+                          group-hover:scale-105 transition-transform duration-300">
+            <Sparkles size={20} className="text-white fill-white/20" />
           </div>
-          <span className="font-bold text-base tracking-tight">
-            <span className="gradient-text">Startup AI</span>
-            <span style={{ color: 'var(--text-primary)' }}> Simulator</span>
-          </span>
+          <div className="flex flex-col">
+            <span className="font-extrabold text-lg tracking-tight leading-tight font-outfit">
+              <span className="gradient-text">Startup AI</span>
+              <span className="text-slate-900 dark:text-white"> Simulator</span>
+            </span>
+            <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-slate-400 dark:text-slate-500">
+              Enterprise Intelligence
+            </span>
+          </div>
         </div>
 
-        {/* Right side */}
-        <div className="flex items-center gap-3">
-          <span
-            className="hidden sm:inline-block text-xs font-medium px-2.5 py-1 rounded-full border"
-            style={{
-              color: 'var(--accent)',
-              borderColor: 'var(--accent-soft)',
-              background: 'var(--accent-soft)',
-            }}
-          >
-            ✦ From idea to insight in seconds
-          </span>
+        {/* Right Actions */}
+        <div className="flex items-center gap-4">
+          {/* Status Badge */}
+          <div className="hidden lg:flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800/50 border border-slate-200 dark:border-white/5">
+            <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="text-xs font-bold text-slate-600 dark:text-slate-300">System Online</span>
+          </div>
 
-          {/* User Email Display */}
+          <div className="h-8 w-[1px] bg-slate-200 dark:bg-white/10 hidden md:block mx-1" />
+
+          {/* User Profile */}
           {userEmail && (
-            <span
-              className="hidden md:inline-block text-xs font-medium px-2.5 py-1 rounded-full border"
-              style={{
-                color: 'var(--text-muted)',
-                borderColor: 'var(--border)',
-                background: 'var(--bg-card)',
-              }}
-            >
-              {userEmail}
-            </span>
+            <div className="hidden md:flex items-center gap-3 pl-2">
+              <div className="flex flex-col items-end">
+                <span className="text-xs font-bold text-slate-900 dark:text-white truncate max-w-[150px]">
+                  {userEmail.split('@')[0]}
+                </span>
+                <span className="text-[10px] text-slate-400 dark:text-slate-500 font-medium">Standard Plan</span>
+              </div>
+              <div className="w-9 h-9 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-white/10 flex items-center justify-center">
+                <User size={16} className="text-slate-600 dark:text-slate-400" />
+              </div>
+            </div>
           )}
 
-          {/* Theme toggle */}
-          <button
-            id="theme-toggle"
-            onClick={toggle}
-            aria-label="Toggle theme"
-            className="w-9 h-9 rounded-xl flex items-center justify-center
-                       transition-all duration-200 hover:scale-105 active:scale-95 border"
-            style={{
-              background: 'var(--bg-card)',
-              borderColor: 'var(--border)',
-              color: 'var(--text-secondary)',
-            }}
-          >
-            {isDark
-              ? <Sun size={16} strokeWidth={2} />
-              : <Moon size={16} strokeWidth={2} />}
-          </button>
+          {/* Controls Container */}
+          <div className="flex items-center gap-2 ml-2">
+            <button
+              onClick={toggle}
+              className="w-10 h-10 rounded-2xl flex items-center justify-center
+                         bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10
+                         hover:border-indigo-500 dark:hover:border-indigo-500/50
+                         transition-all duration-300 text-slate-600 dark:text-slate-400"
+            >
+              {isDark ? <Sun size={18} /> : <Moon size={18} />}
+            </button>
 
-          {/* Logout button */}
-          <button
-            onClick={handleLogout}
-            aria-label="Logout"
-            className="w-9 h-9 rounded-xl flex items-center justify-center
-                       transition-all duration-200 hover:scale-105 active:scale-95 border
-                       hover:bg-red-500/20"
-            style={{
-              background: 'var(--bg-card)',
-              borderColor: 'var(--border)',
-              color: 'var(--text-secondary)',
-            }}
-          >
-            <LogOut size={16} strokeWidth={2} />
-          </button>
+            <button
+              onClick={handleLogout}
+              className="w-10 h-10 rounded-2xl flex items-center justify-center
+                         bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10
+                         hover:bg-rose-50 dark:hover:bg-rose-500/10 hover:text-rose-500
+                         transition-all duration-300 text-slate-600 dark:text-slate-400"
+            >
+              <LogOut size={18} />
+            </button>
+          </div>
         </div>
       </div>
     </header>

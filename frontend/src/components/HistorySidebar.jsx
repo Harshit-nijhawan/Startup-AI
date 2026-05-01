@@ -16,6 +16,10 @@ export default function HistorySidebar({ onAnalysisSelect, currentAnalysisId }) 
   }, []);
 
   const loadHistory = async () => {
+    // Don't fetch if no token or invalid token string (prevents 401 logs)
+    const token = localStorage.getItem('token');
+    if (!token || token === 'undefined' || token === 'null') return;
+
     setLoading(true);
     setError(null);
     try {
@@ -137,10 +141,10 @@ export default function HistorySidebar({ onAnalysisSelect, currentAnalysisId }) 
         {/* History Items */}
         <AnimatePresence>
           {historyList.map((item, index) => (
-            <motion.button
+            <motion.div
               key={item.id}
               onClick={() => handleSelectAnalysis(item.id)}
-              className="w-full text-left p-3 border-b transition-all hover:opacity-80"
+              className="w-full text-left p-3 border-b transition-all hover:opacity-80 cursor-pointer group"
               style={{
                 backgroundColor:
                   currentAnalysisId === item.id
@@ -152,6 +156,8 @@ export default function HistorySidebar({ onAnalysisSelect, currentAnalysisId }) 
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
               transition={{ delay: index * 0.05 }}
+              role="button"
+              tabIndex={0}
             >
               {isOpen ? (
                 <>
@@ -202,7 +208,7 @@ export default function HistorySidebar({ onAnalysisSelect, currentAnalysisId }) 
                   {index + 1}
                 </div>
               )}
-            </motion.button>
+            </motion.div>
           ))}
         </AnimatePresence>
       </div>

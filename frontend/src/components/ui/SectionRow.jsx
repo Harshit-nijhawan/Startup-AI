@@ -131,22 +131,25 @@ export default function SectionRow({ label, value, accentColor }) {
 
   return (
     <div
-      className="flex flex-col gap-1.5 py-3 border-b last:border-b-0"
+      className="flex flex-col gap-2 py-4 border-b last:border-b-0 group/row"
       style={{ borderColor: 'var(--border)' }}
     >
-      <span className={`section-badge w-fit ${badgeClass}`}>
-        {label}
-      </span>
+      <div className="flex items-center justify-between">
+        <span className={`section-badge w-fit ${badgeClass} shadow-sm`}>
+          {label}
+        </span>
+      </div>
+      
       {rendered ? (
         <div
-          className="text-sm leading-relaxed whitespace-pre-wrap break-words"
+          className="text-[0.9375rem] leading-relaxed whitespace-pre-wrap break-words font-medium"
           style={{ color: 'var(--text-secondary)' }}
         >
           {rendered}
         </div>
       ) : (
-        <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
-          —
+        <p className="text-sm italic opacity-50" style={{ color: 'var(--text-muted)' }}>
+          No data available
         </p>
       )}
     </div>
