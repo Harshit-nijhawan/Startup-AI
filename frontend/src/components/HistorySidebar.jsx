@@ -191,8 +191,15 @@ export default function HistorySidebar({ onAnalysisSelect, currentAnalysisId }) 
                   </motion.button>
                 </>
               ) : (
-                <div className="text-xs text-center" style={{ color: 'var(--accent)' }}>
-                  {item.id}
+                <div 
+                  className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold mx-auto border shadow-sm" 
+                  style={{ 
+                    backgroundColor: 'var(--accent-soft)', 
+                    color: 'var(--accent)',
+                    borderColor: 'var(--accent)'
+                  }}
+                >
+                  {index + 1}
                 </div>
               )}
             </motion.button>
